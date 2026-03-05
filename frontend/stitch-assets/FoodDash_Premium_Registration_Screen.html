@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FoodDash Premium Registration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f98c06",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Epilogue", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Epilogue', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .role-card:hover {
+            border-color: #f98c06;
+            background: rgba(249, 140, 6, 0.05);
+        }
+        .role-radio:checked + .role-card {
+            border-color: #f98c06;
+            background: rgba(249, 140, 6, 0.1);
+            box-shadow: 0 0 15px rgba(249, 140, 6, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center overflow-x-hidden">
+<div class="flex h-screen w-full">
+<!-- Left Side: Visual Hero -->
+<div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Moody high-end shot of fresh vegetables and culinary ingredients on a dark background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWXVzVu2tkSGHrTazkPNKUG2dKNHsTetz1bOGZ6RhBLoUYQs4GMMuMUBxozlOm9oiAHyuLEF9p81dMLuxDIrMBco2pWKgvFphKqWywMxl8odxglg_bxMsWl8TT3gaI5Z6yE1YmsCw_b2RYDk1yD3bPhmjIsMOSsJJsRN8EKztgoZGcgPdFS4wS0a6a48oZpiNdhd7vFFGfuWa_wjUhoNr-dJA2WATcCWgJfC_zxp9kkGNbVFzcj5tVzKIZS6EAabCL2BTQcWJjUC8');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent"></div>
+<div class="relative z-10 flex flex-col justify-end p-20 w-full">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-4xl">restaurant_menu</span>
+<span class="text-2xl font-bold tracking-tight">FoodDash</span>
+</div>
+<h1 class="text-6xl font-black leading-tight mb-4 max-w-md">
+                    Join the <span class="text-primary">FoodDash</span> community
+                </h1>
+<p class="text-slate-300 text-lg max-w-sm leading-relaxed">
+                    Experience premium food delivery at your doorstep. Fresh ingredients, lightning fast delivery, and world-class service.
+                </p>
+</div>
+</div>
+<!-- Right Side: Registration Form -->
+<div class="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-12 md:p-20 bg-background-dark relative">
+<!-- Mobile Logo -->
+<div class="lg:hidden absolute top-8 left-8 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">restaurant_menu</span>
+<span class="text-xl font-bold">FoodDash</span>
+</div>
+<div class="w-full max-w-[520px] glass-card rounded-2xl p-8 md:p-10">
+<div class="mb-8">
+<h2 class="text-3xl font-bold mb-2">Create Account</h2>
+<p class="text-slate-400">Enter your details to start your premium culinary journey.</p>
+</div>
+<form class="space-y-5">
+<!-- Name Input -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-300 ml-1">Full Name</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-600" placeholder="John Doe" type="text"/>
+</div>
+</div>
+<!-- Email Input -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-300 ml-1">Email Address</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">mail</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-600" placeholder="name@example.com" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-300 ml-1">Password</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">lock</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-slate-600" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Role Selector -->
+<div class="space-y-3 pt-2">
+<label class="text-sm font-medium text-slate-300 ml-1">I am a...</label>
+<div class="grid grid-cols-3 gap-3">
+<!-- Customer -->
+<label class="cursor-pointer">
+<input checked="" class="hidden role-radio" name="role" type="radio" value="customer"/>
+<div class="role-card flex flex-col items-center justify-center p-4 rounded-xl border border-white/10 transition-all text-center h-full">
+<span class="material-symbols-outlined text-primary mb-2">person_pin_circle</span>
+<span class="text-xs font-semibold uppercase tracking-wider">Customer</span>
+</div>
+</label>
+<!-- Merchant -->
+<label class="cursor-pointer">
+<input class="hidden role-radio" name="role" type="radio" value="merchant"/>
+<div class="role-card flex flex-col items-center justify-center p-4 rounded-xl border border-white/10 transition-all text-center h-full">
+<span class="material-symbols-outlined text-primary mb-2">storefront</span>
+<span class="text-xs font-semibold uppercase tracking-wider">Merchant</span>
+</div>
+</label>
+<!-- Courier -->
+<label class="cursor-pointer">
+<input class="hidden role-radio" name="role" type="radio" value="courier"/>
+<div class="role-card flex flex-col items-center justify-center p-4 rounded-xl border border-white/10 transition-all text-center h-full">
+<span class="material-symbols-outlined text-primary mb-2">pedal_bike</span>
+<span class="text-xs font-semibold uppercase tracking-wider">Courier</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Terms Checkbox -->
+<div class="flex items-start gap-3 pt-2">
+<input class="mt-1 w-5 h-5 rounded border-white/10 bg-white/5 text-primary focus:ring-offset-background-dark focus:ring-primary" id="terms" type="checkbox"/>
+<label class="text-xs text-slate-400 leading-relaxed" for="terms">
+                            By creating an account, I agree to the <a class="text-primary hover:underline" href="#">Terms of Service</a> and <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                        </label>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-gradient-to-r from-[#f98c06] to-[#ffaa40] hover:brightness-110 text-background-dark font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 group" type="submit">
+<span>Join FoodDash</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<div class="mt-8 text-center">
+<p class="text-slate-400 text-sm font-medium">
+                        Already have an account? 
+                        <a class="text-primary font-bold hover:underline ml-1" href="#">Log in</a>
+</p>
+</div>
+</div>
+<!-- Footer Links -->
+<div class="mt-12 flex gap-6 text-xs text-slate-500 font-medium">
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="hover:text-primary transition-colors" href="#">English (US)</a>
+<a class="hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+</div>
+</div>
+</body></html>

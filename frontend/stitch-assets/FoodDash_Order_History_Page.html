@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FoodDash - Order History</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f98c06",
+                        "primary-hover": "#e07b00",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0f0c08", 
+                        "surface-dark": "#181511",
+                        "surface-highlight": "#2a221b",
+                        "accent-glow": "rgba(249, 140, 6, 0.15)"
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(249, 140, 6, 0.2)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background-image: radial-gradient(circle at 15% 50%, rgba(249, 140, 6, 0.08), transparent 25%),
+                              radial-gradient(circle at 85% 30%, rgba(249, 140, 6, 0.05), transparent 25%);
+        }::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0c08; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a221b; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3127; 
+        }
+        .glass-card {
+            background: rgba(24, 21, 17, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+        .glass-card:hover {
+            background: rgba(35, 26, 15, 0.85);
+            border-color: rgba(249, 140, 6, 0.4);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 15px rgba(249, 140, 6, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .progress-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .search-glow:focus-within {
+            box-shadow: 0 0 0 2px rgba(249, 140, 6, 0.3), 0 0 20px rgba(249, 140, 6, 0.15);
+        }
+        .navbar-blur {
+            background: rgba(15, 12, 8, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-primary selection:text-white">
+<header class="sticky top-0 z-50 navbar-blur w-full">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20 gap-8">
+<div class="flex items-center gap-8 shrink-0">
+<a class="flex items-center gap-3 group" href="#">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-orange-500 to-orange-700 flex items-center justify-center text-white font-bold text-xl shadow-glow relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
+<span class="relative z-10">FD</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+</div>
+<span class="text-white text-xl font-bold tracking-tight hidden sm:block">FoodDash</span>
+</a>
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-highlight/50 border border-white/5 hover:border-white/10 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-lg">location_on</span>
+<span class="text-sm font-medium text-gray-300 group-hover:text-white truncate max-w-[150px]">New York, NY</span>
+<span class="material-symbols-outlined text-gray-500 text-sm">expand_more</span>
+</div>
+<nav class="hidden lg:flex items-center gap-1">
+<a class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all" href="#">Dashboard</a>
+<a class="px-4 py-2 text-sm font-bold text-white bg-white/10 rounded-lg transition-all" href="#">Orders</a>
+<a class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all" href="#">Wallet</a>
+</nav>
+</div>
+<div class="flex-1 max-w-lg hidden md:block">
+<div class="relative group search-glow rounded-xl transition-all duration-300">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors text-lg">search</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-2.5 border border-white/5 rounded-xl leading-5 bg-surface-highlight/30 text-white placeholder-gray-500 focus:outline-none focus:bg-surface-highlight/80 focus:border-primary/50 transition-all text-sm" placeholder="Search for food, restaurants..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<button class="relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5 group">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">shopping_cart</span>
+<span class="absolute top-1 right-1 w-4 h-4 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full shadow-lg border border-background-dark">3</span>
+</button>
+<div class="w-px h-8 bg-white/10 mx-1"></div>
+<button class="flex items-center gap-3 group">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-semibold text-white group-hover:text-primary transition-colors">Alex Doe</p>
+<p class="text-xs text-gray-500">Premium Member</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-highlight border border-white/10 overflow-hidden relative group-hover:border-primary/50 transition-colors">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcBLzlkGyKTvrcehI00UhL2ry0bqSmr9gisO1GZ2nAVQP-tPpTx4CekAMLxX83DP33Fa2TU4FLh1uztq3JyejWhhX4ZqvPT5IX_mQ1RQGfUpC9dGgEZ9pCetEmUtoM4QS4bJ_WEFPvb4YdnRwA0p7134clIN-ZfowKh9epRRB26VZdGpWGBDqtOidh_OhMycBLEu0wFf5dZd5iawIA26aj-GUpxFkMtCT5Feb9BXs56U3AmWYeXya33CA5XLPi4wCzC83tC8sgEgs"/>
+</div>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full relative bg-background-dark">
+<div class="pt-8 pb-4 px-4 sm:px-6 lg:px-8">
+<div class="max-w-6xl mx-auto w-full">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<h2 class="text-4xl font-bold text-white tracking-tight drop-shadow-md">Order History</h2>
+<p class="text-gray-400 mt-2 text-sm font-medium">Track active deliveries and review your culinary journey.</p>
+</div>
+<div class="relative group w-full md:w-80 search-glow rounded-2xl transition-all duration-300 md:hidden">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-3 border border-white/5 rounded-2xl leading-5 bg-surface-highlight/50 text-white placeholder-gray-500 focus:outline-none focus:bg-surface-highlight focus:border-primary/50 transition-all shadow-inner text-sm" placeholder="Filter orders..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer hover:text-white text-gray-500 transition-colors">
+<span class="material-symbols-outlined text-xl">tune</span>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-3">
+<button class="p-2.5 rounded-xl bg-surface-highlight/50 border border-white/5 text-gray-400 hover:text-white hover:border-primary/30 transition-all">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<div class="relative group w-64 search-glow rounded-xl transition-all duration-300">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-500 group-focus-within:text-primary transition-colors text-lg">search</span>
+</div>
+<input class="block w-full pl-10 pr-4 py-2.5 border border-white/5 rounded-xl leading-5 bg-surface-highlight/30 text-white placeholder-gray-500 focus:outline-none focus:bg-surface-highlight focus:border-primary/50 transition-all text-sm" placeholder="Filter history..." type="text"/>
+</div>
+</div>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide items-center mb-6">
+<button class="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5 text-sm font-medium transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] active:scale-95 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">view_list</span>
+                    All Orders
+                </button>
+<button class="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-primary/10 text-primary border border-primary/30 shadow-[0_0_15px_rgba(249,140,6,0.15)] text-sm font-medium transition-all active:scale-95 whitespace-nowrap relative overflow-hidden group">
+<span class="absolute inset-0 bg-primary/10 blur-md group-hover:bg-primary/20 transition-all"></span>
+<span class="material-symbols-outlined text-[18px] relative z-10 animate-pulse">timelapse</span>
+<span class="relative z-10">Active</span>
+<span class="ml-1.5 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg relative z-10">2</span>
+</button>
+<button class="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5 text-sm font-medium transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] active:scale-95 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                    Completed
+                </button>
+<button class="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5 text-sm font-medium transition-all hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] active:scale-95 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+                    Cancelled
+                </button>
+</div>
+</div>
+</div>
+<div class="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full flex flex-col gap-8 pb-24">
+<div class="flex items-center gap-3">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</span>
+<h3 class="text-white font-bold text-xl tracking-wide">In Progress</h3>
+<div class="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+</div>
+<div class="glass-card rounded-3xl p-6 relative overflow-hidden group transform hover:-translate-y-1 transition-all duration-300">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-primary via-orange-500 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex flex-col lg:flex-row gap-8">
+<div class="w-full lg:w-56 h-40 shrink-0 rounded-2xl bg-cover bg-center relative overflow-hidden shadow-2xl group-hover:shadow-primary/20 transition-all duration-500" data-alt="Juicy gourmet burger with cheese and lettuce" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbcP6xRsemGeKRH7zSe_2_loC-njYxLqc_sjt4MZkdHjb27NAGx9LVNL-sDx6OcFcbg4eQawzMS7YtpzYW9oSynAO6vImEt5qWChAQf5ui_AiYTHu_iZUdtiwcoHKQ7j-2cH3WPkCkBRz_Haf-bj-nDj5mOltgRs5h5AA8WThHL87ozU57YHjmOioSp3MU-dMx4sq5AVYG8s8yIvUJv5vvrw-SNmgaTxUB1LcMXp2HsJFdmbWykTGog3yTBk_fz30xNcLeJETtvwk');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white/90 text-xs font-medium bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-[14px] text-primary">restaurant</span>
+                        Burger King
+                    </div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h4 class="text-2xl font-bold text-white group-hover:text-primary transition-colors">Order #28492</h4>
+<span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/20 shadow-[0_0_10px_rgba(249,140,6,0.1)]">Active</span>
+</div>
+<p class="text-gray-400 text-sm font-medium mb-1">Whopper Meal • Onion Rings • Coke Zero</p>
+<p class="text-gray-500 text-xs">Placed on Oct 24, 7:12 PM</p>
+</div>
+<div class="text-right">
+<p class="text-white font-bold text-2xl tracking-tight">$24.50</p>
+<p class="text-gray-500 text-xs font-medium mt-1">3 items</p>
+</div>
+</div>
+<div class="mt-6 lg:mt-4 p-4 rounded-xl progress-glass">
+<div class="flex items-center justify-between text-xs font-semibold text-primary mb-3">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] animate-bounce">moped</span>
+                                Out for delivery
+                            </span>
+<span class="text-white bg-primary/20 px-2 py-0.5 rounded text-[10px] border border-primary/20">Arriving in 12 mins</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden shadow-inner relative">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shimmer"></div>
+<div class="bg-gradient-to-r from-orange-600 to-primary h-2 rounded-full w-3/4 shadow-[0_0_15px_rgba(249,140,6,0.6)] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 animate-[pulse_2s_infinite]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex lg:flex-col justify-center gap-3 lg:w-44 shrink-0 border-t lg:border-t-0 lg:border-l border-white/5 pt-5 lg:pt-0 lg:pl-8">
+<button class="flex-1 bg-gradient-to-r from-primary to-orange-600 hover:to-orange-500 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        Track Order
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="flex-1 bg-surface-highlight hover:bg-surface-highlight/80 text-gray-300 hover:text-white font-medium py-3 px-4 rounded-xl text-sm transition-all border border-white/5 hover:border-white/10 flex items-center justify-center gap-2">
+                        Details
+                    </button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-3xl p-6 relative overflow-hidden group transform hover:-translate-y-1 transition-all duration-300">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-primary via-orange-500 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex flex-col lg:flex-row gap-8">
+<div class="w-full lg:w-56 h-40 shrink-0 rounded-2xl bg-cover bg-center relative overflow-hidden shadow-2xl group-hover:shadow-primary/20 transition-all duration-500" data-alt="Delicious pepperoni pizza slice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDpJG-wM-vOdudd9BNdoKjVOjOyml5sbjPCh3SZ3ExBh-IXgEBeeDS3PsNpw5RN0yG9BocNS7ZPH1K8OfxAlZscEMoV620KL3Tm3ANgtjDvj-3m6W5QMmsPwEMQWu_nWbu3tSwDxrZsQYIBlsY-7UZ7_g7fm6wZN7ptaxdeaYwbszhPNG35WpTTi4Qv986JbgPJ5srRc24CrT6RWp7Bv3u8bTJNF2dpJTAS9dvINPLtWAowMJc3NWZawWocSxs1SUzr55d7z-UvenU');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-3 left-3 flex items-center gap-1.5 text-white/90 text-xs font-medium bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-[14px] text-primary">local_pizza</span>
+                        Pizza Hut
+                    </div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h4 class="text-2xl font-bold text-white group-hover:text-primary transition-colors">Order #28490</h4>
+<span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-orange-500/10 text-orange-400 border border-orange-500/20">Preparing</span>
+</div>
+<p class="text-gray-400 text-sm font-medium mb-1">Pepperoni Lover's • Garlic Bread</p>
+<p class="text-gray-500 text-xs">Placed on Oct 24, 6:45 PM</p>
+</div>
+<div class="text-right">
+<p class="text-white font-bold text-2xl tracking-tight">$18.90</p>
+<p class="text-gray-500 text-xs font-medium mt-1">2 items</p>
+</div>
+</div>
+<div class="mt-6 lg:mt-4 p-4 rounded-xl progress-glass">
+<div class="flex items-center justify-between text-xs font-medium text-gray-300 mb-3">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-orange-400">skillet</span>
+                                Preparing your food
+                            </span>
+<span class="text-gray-400">Est. arrival 45 mins</span>
+</div>
+<div class="w-full bg-white/5 rounded-full h-2 overflow-hidden shadow-inner">
+<div class="bg-orange-500/60 h-2 rounded-full w-1/4 relative overflow-hidden">
+<div class="absolute inset-0 bg-white/10 animate-[pulse_3s_infinite]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex lg:flex-col justify-center gap-3 lg:w-44 shrink-0 border-t lg:border-t-0 lg:border-l border-white/5 pt-5 lg:pt-0 lg:pl-8">
+<button class="w-full bg-surface-highlight hover:bg-surface-highlight/80 text-gray-300 hover:text-white font-medium py-3 px-4 rounded-xl text-sm transition-all border border-white/5 hover:border-white/10 flex items-center justify-center gap-2">
+                        View Status
+                    </button>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 mt-8 mb-2">
+<div class="w-8 h-8 rounded-full bg-surface-highlight flex items-center justify-center border border-white/5">
+<span class="material-symbols-outlined text-gray-400 text-sm">history</span>
+</div>
+<h3 class="text-white font-bold text-xl tracking-wide">Past Orders</h3>
+<div class="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+</div>
+<div class="glass-card rounded-2xl p-5 group hover:border-white/10 transition-all">
+<div class="flex flex-col lg:flex-row gap-6 items-center">
+<div class="w-full lg:w-20 h-20 shrink-0 rounded-xl bg-cover bg-center relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 shadow-md" data-alt="Fresh sushi rolls on a wooden plate" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCUBmMuXZ-S_yEWedjQ1vfLBqOgtZngKYoM6He7uGs6nquoitrbrrIGcoRZ1iTyWtKOVzpQ8J_Zre1p0o4zCR5v-OH_My73uaNm3LZNwZcNEk313S1XgFz41vHgO1Sj_XVa53vkVWp_D8NUn6GFZajpJMKcjACgUnCQUkqKoeb1DtGO6nQ7da4864yuL_b_ptjk0e0lgcXlOyiR3svc0mvx7DGdQjkIzbjalU4dmpLDJrU7tX6pOEYZpQ7sS0k_TilZLD4v4xe2rl4');"></div>
+<div class="flex-1 w-full flex flex-col justify-center">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Sushi Zen</h4>
+<p class="text-white font-bold text-lg">$52.00</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+<span class="flex items-center gap-1 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-medium">
+<span class="material-symbols-outlined text-[14px]">check</span> Delivered
+                        </span>
+<span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+<span>Oct 24, 6:30 PM</span>
+<span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+<span class="truncate max-w-[200px]">Dragon Roll, Spicy Tuna Roll...</span>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full lg:w-auto shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5 mt-4 lg:mt-0">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-transparent hover:bg-white/5 border border-white/10 hover:border-white/30 text-gray-400 hover:text-white transition-all tooltip" title="View Receipt">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="bg-white/5 hover:bg-primary hover:text-white border border-white/10 hover:border-primary/50 text-white font-medium py-2 px-5 rounded-full text-sm transition-all flex items-center gap-2 group/btn shadow-lg shadow-transparent hover:shadow-primary/20">
+<span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-180 transition-transform duration-500">refresh</span>
+                        Reorder
+                    </button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-5 group hover:border-white/10 transition-all">
+<div class="flex flex-col lg:flex-row gap-6 items-center">
+<div class="w-full lg:w-20 h-20 shrink-0 rounded-xl bg-cover bg-center relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500 shadow-md" data-alt="Healthy green salad bowl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA83D4-VYuK39kBVz0RqPNSxG8_dahqhKXN0THf06BjFsvqwenNfR_bD_GeaBd0OCkQj9Kzf_D0sem2rUCbY86n47DbNhSh4enx36qCLpjdzk28QakH1d5GQ_J7utTOVH2EZocmzJffnAymlQXWLnVgbC6V57vGAd29KUe-QZ8cfBXsWGClrW11E3NTLwV49O7BsPuXHox67-b_RJUmsUZHHvoWRRXhmC3xZDNgbH-2eq8T3scr5-7f3qXt9gn4U_KlnOcRJZ_YDO0');"></div>
+<div class="flex-1 w-full flex flex-col justify-center">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-lg font-bold text-white group-hover:text-primary transition-colors">Fresh Greens</h4>
+<p class="text-white font-bold text-lg">$15.50</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+<span class="flex items-center gap-1 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-medium">
+<span class="material-symbols-outlined text-[14px]">check</span> Delivered
+                        </span>
+<span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+<span>Oct 22, 12:15 PM</span>
+<span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+<span class="truncate max-w-[200px]">Caesar Salad, Iced Tea</span>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full lg:w-auto shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5 mt-4 lg:mt-0">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-transparent hover:bg-white/5 border border-white/10 hover:border-white/30 text-gray-400 hover:text-white transition-all" title="View Receipt">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</button>
+<button class="bg-white/5 hover:bg-primary hover:text-white border border-white/10 hover:border-primary/50 text-white font-medium py-2 px-5 rounded-full text-sm transition-all flex items-center gap-2 group/btn shadow-lg shadow-transparent hover:shadow-primary/20">
+<span class="material-symbols-outlined text-[18px] group-hover/btn:rotate-180 transition-transform duration-500">refresh</span>
+                        Reorder
+                    </button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-5 group opacity-60 hover:opacity-100 transition-all duration-300 bg-red-900/5 hover:bg-surface-highlight">
+<div class="flex flex-col lg:flex-row gap-6 items-center">
+<div class="w-full lg:w-20 h-20 shrink-0 rounded-xl bg-cover bg-center relative overflow-hidden grayscale opacity-50" data-alt="Tasty beef burger with fries" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBpBxYbqbg9oqu63FCNqx8PPsXj96d7rdU38iLnfnyYwCEMZ-AqGSzb60ZPrZtk0xGVGeIRm_3GSRO9NsAH6Hm5q_w7fqo7t13Z-Ei2yYcaX5o2nXJHAJjoqROuFFijRwDlVdKCCMSJsCLbdJV0i9JJnhZ8strlAblcdquAd-CN6sgXR6QOE7M5B3kpwarPWk7Xpcua98OBhIj7edsIvo7AyazJRNIBKWYAit4ytVW2L0WfuPCKjq8yBWdHs3t8wM37SBB_WwnGw_8');"></div>
+<div class="flex-1 w-full flex flex-col justify-center">
+<div class="flex justify-between items-center mb-1">
+<h4 class="text-lg font-bold text-gray-400 line-through decoration-red-500/40">Burger King</h4>
+<p class="text-gray-500 font-bold line-through decoration-red-500/40">$24.50</p>
+</div>
+<div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+<span class="flex items-center gap-1 text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 font-medium">
+<span class="material-symbols-outlined text-[14px]">cancel</span> Cancelled
+                        </span>
+<span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+<span>Oct 20, 8:00 PM</span>
+</div>
+<p class="text-rose-400/60 text-xs mt-1.5 italic">Order cancelled by user</p>
+</div>
+<div class="flex items-center gap-3 w-full lg:w-auto shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5 mt-4 lg:mt-0">
+<button class="text-gray-400 hover:text-white text-sm font-medium px-4 py-2 transition-colors flex items-center gap-2 border border-transparent hover:border-white/10 rounded-lg hover:bg-white/5">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                        Help Center
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

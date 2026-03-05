@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FoodDash Shopping Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f98c06",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#181511", // Matching the provided component bg
+                        "card-dark": "#231e17", // Slightly lighter for cards
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #181511; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3a3127; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #524638; 
+        }
+        
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(35, 30, 23, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#3a3127] bg-[#181511]/95 backdrop-blur-md px-6 py-3 lg:px-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white cursor-pointer select-none">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">FoodDash</h2>
+</div>
+<div class="hidden md:flex items-center bg-[#3a3127] rounded-lg h-10 w-full max-w-md group focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+<div class="text-[#bbac9b] flex items-center justify-center pl-3">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-white placeholder:text-[#bbac9b] focus:ring-0 text-sm px-3 h-full" placeholder="Search for food, restaurants..." type="text"/>
+</div>
+</div>
+<div class="flex flex-1 justify-end items-center gap-6">
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-white/80 hover:text-primary text-sm font-medium transition-colors" href="#">Restaurants</a>
+<a class="text-white/80 hover:text-primary text-sm font-medium transition-colors" href="#">Deals</a>
+<a class="text-white/80 hover:text-primary text-sm font-medium transition-colors" href="#">My Orders</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="relative flex items-center justify-center rounded-lg size-10 bg-[#3a3127] text-white hover:bg-[#4a3e32] transition-colors group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_cart</span>
+<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm">3</span>
+</button>
+<button class="flex items-center justify-center rounded-lg size-10 bg-[#3a3127] text-white hover:bg-[#4a3e32] transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-4 py-8 lg:px-8 lg:py-12">
+<!-- Page Title -->
+<div class="mb-8">
+<h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">Your Cart</h1>
+<p class="text-[#bbac9b] text-base md:text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">storefront</span>
+                Order from <span class="font-semibold text-white">The Burger Joint</span>
+</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+<!-- Left Column: Cart Items -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Cart Items List -->
+<div class="flex flex-col gap-4">
+<!-- Item 1 -->
+<div class="group flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-[#231e17] border border-[#3a3127] hover:border-primary/30 transition-all duration-300">
+<div class="shrink-0">
+<img alt="Juicy double cheeseburger with truffle sauce" class="w-full h-48 sm:w-32 sm:h-32 object-cover rounded-lg shadow-md" data-alt="Close up of a double truffle burger on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFNDwCTseAYNWGhiLvIVp_5TDc-iA9aGmH-wWE1o_d8y4-kKXmzljHBdgDlhTeFOBtvSNra7qBPWMua5C_DmQPgozWBD8DCKX0PpsKIlJET0Cj3O9qUk7Z_3XL5tD1YYzn5pWR6SBO1rxy75Ozy3m7sAIqn_Ov5NbbfuTiF-GGSiqOyss2CrdCRzn2tN_O_gJ8kYo8dj1bVXyZpC7a5xUtotgz8oKofzXCiQ0dcUh2m3KzMgLem65MCXqMgxFaKiTH4nQV6KBUzqo"/>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">Double Truffle Burger</h3>
+<p class="text-[#bbac9b] text-sm leading-relaxed mb-2">Medium rare, extra cheese, no onions, toasted bun.</p>
+</div>
+<span class="text-lg font-bold text-white">$18.50</span>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<button class="text-[#bbac9b] hover:text-red-500 text-sm font-medium flex items-center gap-1 transition-colors group/delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span class="group-hover/delete:underline">Remove</span>
+</button>
+<div class="flex items-center bg-[#3a3127] rounded-lg p-1">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-10 bg-transparent border-none text-center text-white font-medium focus:ring-0 p-0 text-sm appearance-none m-0" readonly="" type="number" value="1"/>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-[#231e17] border border-[#3a3127] hover:border-primary/30 transition-all duration-300">
+<div class="shrink-0">
+<img alt="Crispy golden fries with parmesan cheese and herbs" class="w-full h-48 sm:w-32 sm:h-32 object-cover rounded-lg shadow-md" data-alt="Bowl of truffle parmesan fries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBce8xod93qIPYfmwP712P6Z1hZaLxpD0uTLM0shF93hu-qr0DzLsgQYvVlrQky5rcRU1ql3FmsrEdH-afgDaHxMIDAav9d0pkXRG_WtNate9A7huLx-FSKYHkOeW_SGQ6NZCyD-8vE5H1s_8xG9xcGTFsas2bRcUsPZ1rSsiC00bGKrznBSq6TUVPCRzBLem_M2JDEPJqm9uRnyQtTAhzqEriwZosvFc9D2xTHEwMvr466nuRp2gVvuL-VGaYceDt3bSaLCmyM3tk"/>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">Truffle Parmesan Fries</h3>
+<p class="text-[#bbac9b] text-sm leading-relaxed mb-2">Large size, extra crispy, truffle oil drizzle.</p>
+</div>
+<span class="text-lg font-bold text-white">$8.00</span>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<button class="text-[#bbac9b] hover:text-red-500 text-sm font-medium flex items-center gap-1 transition-colors group/delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span class="group-hover/delete:underline">Remove</span>
+</button>
+<div class="flex items-center bg-[#3a3127] rounded-lg p-1">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-10 bg-transparent border-none text-center text-white font-medium focus:ring-0 p-0 text-sm appearance-none m-0" readonly="" type="number" value="1"/>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="group flex flex-col sm:flex-row gap-4 p-4 rounded-xl bg-[#231e17] border border-[#3a3127] hover:border-primary/30 transition-all duration-300">
+<div class="shrink-0">
+<img alt="Small container of orange spicy sauce" class="w-full h-48 sm:w-32 sm:h-32 object-cover rounded-lg shadow-md" data-alt="Small cup of spicy aioli dipping sauce" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu9yBRvA2oluhJRw9hwOKhcwA48RalcSiKtLFEQUONs3WhvRAFgXxrPqJBVIvUVefB0UxHL2kogB6yoU_SzZZF16rZJl45fZV1EGZ38MaZVmQFjFvISNA-s9smcI5HNjH3J7c3j3MzmQpfF0L5FeJt3OSAaNbPNZu0SmtrEzIHRJ8y-BmmawFPqAO9pgdrBlDvd18yJVMRzAknyjAl32lB4zE0F0ik0FaEtiaFMniHxceQDXOmjRmiwMFt6KKvAas0NfPH1s2dC7k"/>
+</div>
+<div class="flex flex-1 flex-col justify-between">
+<div class="flex justify-between items-start gap-4">
+<div>
+<h3 class="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">Spicy Aioli Dipping Sauce</h3>
+<p class="text-[#bbac9b] text-sm leading-relaxed mb-2">Side cup.</p>
+</div>
+<span class="text-lg font-bold text-white">$3.00</span>
+</div>
+<div class="flex items-center justify-between mt-4 sm:mt-0">
+<button class="text-[#bbac9b] hover:text-red-500 text-sm font-medium flex items-center gap-1 transition-colors group/delete">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+<span class="group-hover/delete:underline">Remove</span>
+</button>
+<div class="flex items-center bg-[#3a3127] rounded-lg p-1">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<input class="w-10 bg-transparent border-none text-center text-white font-medium focus:ring-0 p-0 text-sm appearance-none m-0" readonly="" type="number" value="2"/>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-[#4a3e32] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Special Instructions -->
+<div class="rounded-xl bg-[#231e17] border border-[#3a3127] p-6 mt-2">
+<label class="block text-sm font-bold text-white mb-3 flex items-center gap-2" for="instructions">
+<span class="material-symbols-outlined text-primary text-[20px]">edit_note</span>
+                        Add a note for the restaurant
+                    </label>
+<textarea class="w-full rounded-lg bg-[#181511] border-[#3a3127] text-white placeholder:text-[#bbac9b] focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-sm leading-relaxed" id="instructions" placeholder="e.g. Please put the sauce on the side, no cutlery needed..." rows="3"></textarea>
+</div>
+</div>
+<!-- Right Column: Sticky Summary -->
+<div class="lg:col-span-4 relative">
+<div class="sticky top-28 space-y-4">
+<!-- Summary Card -->
+<div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-5">
+<h2 class="text-xl font-bold text-white border-b border-white/10 pb-4">Order Summary</h2>
+<!-- Cost Breakdown -->
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[#bbac9b]">
+<span class="text-sm">Subtotal</span>
+<span class="text-white font-medium">$29.50</span>
+</div>
+<div class="flex justify-between items-center text-[#bbac9b]">
+<span class="text-sm flex items-center gap-1">
+                                    Delivery Fee
+                                    <span class="material-symbols-outlined text-[16px] cursor-help" title="Standard delivery fee">info</span>
+</span>
+<span class="text-white font-medium">$0.99</span>
+</div>
+<div class="flex justify-between items-center text-[#bbac9b]">
+<span class="text-sm">Service Fee</span>
+<span class="text-white font-medium">$2.00</span>
+</div>
+<div class="flex justify-between items-center text-[#bbac9b]">
+<span class="text-sm">Estimated Tax</span>
+<span class="text-white font-medium">$2.50</span>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-white/10 my-1"></div>
+<!-- Total -->
+<div class="flex justify-between items-end">
+<span class="text-white font-bold text-lg">Total</span>
+<span class="text-primary font-black text-3xl tracking-tight">$34.99</span>
+</div>
+<!-- Promo Code -->
+<div class="pt-2">
+<div class="flex gap-2">
+<div class="relative flex-grow">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-[#bbac9b] text-[18px]">local_offer</span>
+</div>
+<input class="block w-full rounded-lg border-0 py-2.5 pl-10 pr-3 text-white bg-[#181511] placeholder:text-[#bbac9b] focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6" placeholder="Promo code" type="text"/>
+</div>
+<button class="rounded-lg bg-[#3a3127] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#4a3e32] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors" type="button">
+                                    Apply
+                                </button>
+</div>
+</div>
+<!-- Checkout Button -->
+<button class="w-full mt-2 rounded-xl bg-primary px-4 py-3.5 text-base font-bold text-white shadow-[0_0_20px_rgba(249,140,6,0.3)] hover:shadow-[0_0_25px_rgba(249,140,6,0.5)] hover:bg-[#ff9d26] active:scale-[0.99] transition-all duration-200 flex items-center justify-center gap-2">
+                            Proceed to Checkout
+                            <span class="material-symbols-outlined text-[20px] font-bold">arrow_forward</span>
+</button>
+</div>
+<!-- Trust Badges / Info -->
+<div class="text-center">
+<p class="text-xs text-[#bbac9b] flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-green-500">lock</span>
+                            Secure checkout powered by FoodDash
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

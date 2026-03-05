@@ -1,0 +1,219 @@
+### Food Delivery System API Testing
+@baseUrl = http://localhost:3000/api
+@authToken = {{login.response.body.data.accessToken}}
+
+### 1. AUTHENTICATION
+
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "password": "Password123!",
+  "name": "John Doe",
+  "phone": "08123456789",
+  "role": "customer"
+}
+
+###
+
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "password": "Password123!"
+}
+
+###
+
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{authToken}}
+
+###
+
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{authToken}}
+
+
+### 2. PUBLIC DISCOVERY
+
+GET {{baseUrl}}/merchants?page=1&limit=10
+
+###
+
+# Replace {id} with an actual UUID from the list above
+GET {{baseUrl}}/merchants/550e8400-e29b-41d4-a716-446655440000
+
+###
+
+GET {{baseUrl}}/categories
+
+###
+
+GET {{baseUrl}}/menu-items/search?search=pizza&minPrice=10000
+
+
+### 3. ADDRESSES (Customer)
+
+GET {{baseUrl}}/addresses
+Authorization: Bearer {{authToken}}
+
+###
+
+POST {{baseUrl}}/addresses
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "label": "Home",
+  "addressLine": "123 Main St, Jakarta",
+  "latitude": "-6.200000",
+  "longitude": "106.816666",
+  "city": "Jakarta",
+  "postalCode": "12345",
+  "isDefault": true
+}
+
+###
+
+# Replace {id} with Address UUID
+PATCH {{baseUrl}}/addresses/550e8400-e29b-41d4-a716-446655440001/default
+Authorization: Bearer {{authToken}}
+
+
+### 4. MERCHANT CONTEXT (Requires merchant login)
+
+# @name merchantLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "merchant@example.com",
+  "password": "Password123!"
+}
+
+@merchantToken = {{merchantLogin.response.body.data.accessToken}}
+
+###
+
+GET {{baseUrl}}/merchant/profile
+Authorization: Bearer {{merchantToken}}
+
+###
+
+GET {{baseUrl}}/merchant/menu
+Authorization: Bearer {{merchantToken}}
+
+###
+
+POST {{baseUrl}}/merchant/menu
+Authorization: Bearer {{merchantToken}}
+Content-Type: application/json
+
+{
+  "name": "Special Pizza",
+  "description": "Premium pizza with extra cheese",
+  "price": 75000,
+  "categoryId": "550e8400-e29b-41d4-a716-446655440002",
+  "isAvailable": true
+}
+
+
+### 5. ORDERS
+
+# Create Order (Customer)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "merchantId": "550e8400-e29b-41d4-a716-446655440000",
+  "items": [
+    {
+      "menuItemId": "550e8400-e29b-41d4-a716-446655440003",
+      "quantity": 2,
+      "notes": "No onions"
+    }
+  ],
+  "deliveryAddressId": "550e8400-e29b-41d4-a716-446655440001",
+  "paymentMethod": "cod"
+}
+
+###
+
+# Get Merchant Orders
+GET {{baseUrl}}/merchant/orders?status=pending
+Authorization: Bearer {{merchantToken}}
+
+
+### 6. COURIER CONTEXT (Requires courier login)
+
+# @name courierLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "courier@example.com",
+  "password": "Password123!"
+}
+
+@courierToken = {{courierLogin.response.body.data.accessToken}}
+
+###
+
+GET {{baseUrl}}/courier/available-orders
+Authorization: Bearer {{courierToken}}
+
+###
+
+PATCH {{baseUrl}}/courier/status
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{
+  "isOnline": true
+}
+
+
+### 7. REVIEWS
+
+GET {{baseUrl}}/reviews/merchant/550e8400-e29b-41d4-a716-446655440000
+
+###
+
+POST {{baseUrl}}/reviews
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "orderId": "550e8400-e29b-41d4-a716-446655440004",
+  "rating": 5,
+  "comment": "Excellent food and fast delivery!"
+}
+
+
+### 8. ADMIN CONTEXT
+
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Password123!"
+}
+
+@adminToken = {{adminLogin.response.body.data.accessToken}}
+
+###
+
+GET {{baseUrl}}/admin/dashboard
+Authorization: Bearer {{adminToken}}
+
+###
+
+GET {{baseUrl}}/complaints
+Authorization: Bearer {{adminToken}}
